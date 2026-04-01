@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lender Portal — TrustScore</title>
+  <meta name="description" content="Lender module for TrustScore. Auto-approve or deny micro-loans for gig workers based on real-time Trust Scores." />>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#grad1)" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="url(#grad1)" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="url(#grad1)" stroke-width="2" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="grad1" x1="2" y1="2" x2="22" y2="22">
+                <stop offset="0%" stop-color="#005F02"/>
+                <stop offset="100%" stop-color="#427A43"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="logo-text">TrustScore</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="dashboard.html" class="nav-link">Worker Dashboard</a>
+        <a href="lender.html" class="nav-link" style="color:#a5b4fc">Lender Portal</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="mobile-link">Home</a>
+      <a href="dashboard.html" class="mobile-link">Worker Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="lender-page">
+    <div class="lender-container">
+      <div class="lender-header">
+        <h1>🏦 Lender Portal</h1>
+        <p>Automated loan decision engine powered by real-time Trust Scores. Approve or deny micro-loans in seconds.</p>
+      </div>
+
+      <!-- Loan Engine -->
+      <div class="loan-engine-grid">
+        <!-- Loan Request Form -->
+        <div class="loan-form-panel">
+          <h3>📋 Loan Application</h3>
+          <div class="form-group">
+            <label class="form-label" for="applicantSelect">Select Applicant</label>
+            <select class="form-select" id="applicantSelect">
+              <option value="0">Ramesh Kumar (Score: 782)</option>
+              <option value="1">Priya Sharma (Score: 634)</option>
+              <option value="2">Arjun Singh (Score: 451)</option>
+              <option value="3">New Applicant (Score: 380)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loanAmount">Loan Amount</label>
+            <input type="range" class="amount-slider" id="loanAmountSlider" min="500" max="25000" step="500" value="5000" />
+            <div class="amount-labels">
+              <span>₹500</span>
+              <span id="sliderVal" style="color:var(--accent-purple);font-weight:700">₹5,000</span>
+              <span>₹25,000</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loanPurpose">Loan Purpose</label>
+            <select class="form-select" id="loanPurpose">
+              <option value="daily-pay">Daily Pay Advance</option>
+              <option value="tools">Tools & Equipment</option>
+              <option value="emergency">Emergency Fund</option>
+              <option value="transport">Transport Cost</option>
+              <option value="training">Skill Training</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="repaymentWindow">Repayment Window</label>
+            <select class="form-select" id="repaymentWindow">
+              <option value="1">1 Day (Daily Pay)</option>
+              <option value="7" selected>7 Days</option>
+              <option value="14">14 Days</option>
+              <option value="30">30 Days</option>
+            </select>
+          </div>
+          <button class="submit-loan-btn" id="submitLoanBtn">
+            ⚡ Evaluate & Decide Loan
+          </button>
+        </div>
+
+        <!-- Loan Result Panel -->
+        <div class="loan-result-panel">
+          <h3>📊 Decision Result</h3>
+          <div class="loan-result-empty" id="loanEmpty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            <p>Submit an application to see the automated decision</p>
+          </div>
+          <div class="loan-decision" id="loanDecision">
+            <div class="decision-banner" id="decisionBanner">
+              <div class="decision-icon" id="decisionIcon">✓</div>
+              <div>
+                <div class="decision-title" id="decisionTitle">Approved</div>
+                <div class="decision-reason" id="decisionReason">Strong Trust Score meets lending threshold</div>
+              </div>
+            </div>
+
+            <!-- Score breakdown for this decision -->
+            <div>
+              <p class="panel-title" style="margin-bottom:12px">Score Analysis</p>
+              <div class="loan-score-breakdown-mini">
+                <div class="score-row">
+                  <span class="score-row-label">Trust Score</span>
+                  <div class="score-row-bar"><div class="score-row-fill" id="lr-trust" style="width:0%;background:linear-gradient(90deg,#6366f1,#10b981)"></div></div>
+                  <span class="score-row-val" id="lv-trust">782</span>
+                </div>
+                <div class="score-row">
+                  <span class="score-row-label">Completion Rate</span>
+                  <div class="score-row-bar"><div class="score-row-fill" id="lr-completion" style="width:0%;background:linear-gradient(90deg,#6366f1,#10b981)"></div></div>
+                  <span class="score-row-val" id="lv-completion">96%</span>
+                </div>
+                <div class="score-row">
+                  <span class="score-row-label">Avg Rating</span>
+                  <div class="score-row-bar"><div class="score-row-fill" id="lr-rating" style="width:0%;background:linear-gradient(90deg,#3b82f6,#6366f1)"></div></div>
+                  <span class="score-row-val" id="lv-rating">4.8★</span>
+                </div>
+                <div class="score-row">
+                  <span class="score-row-label">Income Consistency</span>
+                  <div class="score-row-bar"><div class="score-row-fill" id="lr-income" style="width:0%;background:linear-gradient(90deg,#f59e0b,#6366f1)"></div></div>
+                  <span class="score-row-val" id="lv-income">78%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Loan Terms -->
+            <div>
+              <p class="panel-title" style="margin-bottom:12px">Loan Terms (if approved)</p>
+              <div class="loan-terms">
+                <div class="loan-term-item">
+                  <div class="loan-term-label">Amount</div>
+                  <div class="loan-term-val" id="termAmount">₹5,000</div>
+                </div>
+                <div class="loan-term-item">
+                  <div class="loan-term-label">Interest Rate</div>
+                  <div class="loan-term-val" id="termRate">0.8%</div>
+                </div>
+                <div class="loan-term-item">
+                  <div class="loan-term-label">Repay By</div>
+                  <div class="loan-term-val" id="termRepay">7 Days</div>
+                </div>
+                <div class="loan-term-item">
+                  <div class="loan-term-label">Max Eligible</div>
+                  <div class="loan-term-val" id="termMax">₹15,000</div>
+                </div>
+                <div class="loan-term-item">
+                  <div class="loan-term-label">Auto-Repay</div>
+                  <div class="loan-term-val" id="termAutoRepay">Enabled</div>
+                </div>
+                <div class="loan-term-item">
+                  <div class="loan-term-label">Processing</div>
+                  <div class="loan-term-val">Instant</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="submit-loan-btn" id="disburseLoanBtn" style="display:none">
+              💸 Disburse Loan Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Queue (high-volume ingestion demo) -->
+      <div class="queue-section">
+        <h3>📥 Live Application Queue <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(Async processing — no DB lock)</span></h3>
+        <div class="queue-table-wrap">
+          <table class="queue-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Worker</th>
+                <th>Trust Score</th>
+                <th>Amount</th>
+                <th>Purpose</th>
+                <th>Status</th>
+                <th>Decision</th>
+                <th>Processed At</th>
+              </tr>
+            </thead>
+            <tbody id="queueTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Data Ingestion Monitor -->
+      <div class="ingestion-section">
+        <h3>⚡ Real-Time Data Ingestion Monitor</h3>
+        <div class="ingestion-grid">
+          <div class="ingestion-card">
+            <div class="ingestion-header">
+              <span class="ingestion-name">🚗 RideConnect API</span>
+              <span class="ingestion-status">
+                <div class="status-dot active"></div>
+                Live
+              </span>
+            </div>
+            <div class="ingestion-log" id="logRide"></div>
+            <div class="queued-count" id="rideQueued">Queue: 0 pending</div>
+          </div>
+          <div class="ingestion-card">
+            <div class="ingestion-header">
+              <span class="ingestion-name">💼 FreelanceHub API</span>
+              <span class="ingestion-status">
+                <div class="status-dot active"></div>
+                Live
+              </span>
+            </div>
+            <div class="ingestion-log" id="logFreelance"></div>
+            <div class="queued-count" id="freelanceQueued">Queue: 0 pending</div>
+          </div>
+          <div class="ingestion-card">
+            <div class="ingestion-header">
+              <span class="ingestion-name">🏗️ BuildDay API</span>
+              <span class="ingestion-status">
+                <div class="status-dot busy"></div>
+                Processing
+              </span>
+            </div>
+            <div class="ingestion-log" id="logBuild"></div>
+            <div class="queued-count" id="buildQueued">Queue: 0 pending</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="lender.js"></script>
+  <script>
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 20);
+    });
+  </script>
+</body>
+</html>

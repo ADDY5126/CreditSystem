@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Worker Dashboard — TrustScore</title>
+  <meta name="description" content="Real-time Trust Score dashboard for gig workers. View your credibility score, earnings history, and connected platforms." />>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#grad1)" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="url(#grad1)" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="url(#grad1)" stroke-width="2" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="grad1" x1="2" y1="2" x2="22" y2="22">
+                <stop offset="0%" stop-color="#005F02"/>
+                <stop offset="100%" stop-color="#427A43"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="logo-text">TrustScore</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="dashboard.html" class="nav-link" style="color:#C0B87A">Dashboard</a>
+        <a href="lender.html" class="btn-nav">Lender Portal</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="mobile-link">Home</a>
+      <a href="dashboard.html" class="mobile-link">Dashboard</a>
+      <a href="lender.html" class="mobile-link">Lender Portal</a>
+    </div>
+  </nav>
+
+  <div class="dashboard-page">
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div class="dashboard-welcome">
+        <h1 id="dashWorkerName">Worker Dashboard</h1>
+        <p id="dashWorkerSub">Viewing real-time Trust Score &amp; work history</p>
+      </div>
+      <div class="dashboard-controls">
+        <select class="worker-selector" id="workerSelector">
+          <option value="0">👤 Ramesh Kumar</option>
+          <option value="1">👤 Priya Sharma</option>
+          <option value="2">👤 Arjun Singh</option>
+        </select>
+        <button class="refresh-btn" id="refreshBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Refresh Data
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Sidebar -->
+      <div class="dashboard-sidebar">
+        <!-- Score Panel -->
+        <div class="score-panel">
+          <div class="score-panel-header">
+            <div class="worker-avatar-lg" id="workerAvatar">RK</div>
+            <div class="worker-details-sm">
+              <strong id="workerFullName">Ramesh Kumar</strong>
+              <span id="workerLocation">Mumbai, MH · Daily Worker</span>
+            </div>
+            <span class="score-badge excellent" id="scoreBadge">Excellent</span>
+          </div>
+
+          <div class="big-score-ring">
+            <svg viewBox="0 0 180 180">
+              <circle cx="90" cy="90" r="76" fill="none" stroke="rgba(0,95,2,0.12)" stroke-width="14"/>
+              <circle cx="90" cy="90" r="76" fill="none" stroke="url(#bigScoreGrad)" stroke-width="14"
+                stroke-dasharray="477.5" id="bigScoreCircle" stroke-dashoffset="200"
+                stroke-linecap="round" transform="rotate(-90 90 90)"/>
+              <defs>
+                <linearGradient id="bigScoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#005F02"/>
+                  <stop offset="100%" stop-color="#C0B87A"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="big-score-center">
+              <span class="big-score-num" id="bigScoreNum">782</span>
+              <span class="big-score-label">/ 1000 Trust Score</span>
+            </div>
+          </div>
+
+          <p class="score-change positive" id="scoreChange">▲ +18 pts this week</p>
+
+          <div class="score-breakdown">
+            <p class="panel-title" style="margin-bottom:12px">Score Breakdown</p>
+            <div class="breakdown-item">
+              <span class="breakdown-label">Job Completion</span>
+              <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-excellent" id="bar-completion" style="width:96%"></div></div>
+              <span class="breakdown-pct" id="pct-completion">96%</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="breakdown-label">Avg Rating</span>
+              <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-excellent" id="bar-rating" style="width:96%"></div></div>
+              <span class="breakdown-pct" id="pct-rating">4.8★</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="breakdown-label">Income Consistency</span>
+              <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-good" id="bar-income" style="width:78%"></div></div>
+              <span class="breakdown-pct" id="pct-income">78%</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="breakdown-label">Platform Tenure</span>
+              <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-good" id="bar-tenure" style="width:82%"></div></div>
+              <span class="breakdown-pct" id="pct-tenure">2.1yr</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="breakdown-label">Dispute Rate</span>
+              <div class="breakdown-bar-wrap"><div class="breakdown-bar bar-excellent" id="bar-dispute" style="width:97%"></div></div>
+              <span class="breakdown-pct" id="pct-dispute">0.3%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Platform Connections -->
+        <div class="platform-connections">
+          <p class="panel-title">Connected Platforms</p>
+          <div id="platformConnectionsList">
+            <div class="connection-item">
+              <span class="conn-icon">🚗</span>
+              <div class="conn-info">
+                <span class="conn-name">RideConnect</span>
+                <span class="conn-jobs">324 trips completed</span>
+              </div>
+              <div class="conn-status"></div>
+            </div>
+            <div class="connection-item">
+              <span class="conn-icon">💼</span>
+              <div class="conn-info">
+                <span class="conn-name">FreelanceHub</span>
+                <span class="conn-jobs">18 contracts done</span>
+              </div>
+              <div class="conn-status"></div>
+            </div>
+            <div class="connection-item">
+              <span class="conn-icon">🏗️</span>
+              <div class="conn-info">
+                <span class="conn-name">BuildDay</span>
+                <span class="conn-jobs">89 days worked</span>
+              </div>
+              <div class="conn-status"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="dashboard-main">
+        <!-- Metrics Row -->
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-card-icon">💰</div>
+            <div class="metric-card-num" id="metricEarnings">₹24,820</div>
+            <div class="metric-card-label">Monthly Earnings</div>
+            <div class="metric-card-change up" id="metricEarningsChange">▲ 12% vs last month</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card-icon">✅</div>
+            <div class="metric-card-num" id="metricJobs">431</div>
+            <div class="metric-card-label">Total Jobs Done</div>
+            <div class="metric-card-change up" id="metricJobsChange">▲ 24 this month</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card-icon">⭐</div>
+            <div class="metric-card-num" id="metricRating">4.8</div>
+            <div class="metric-card-label">Avg Rating</div>
+            <div class="metric-card-change up" id="metricRatingChange">▲ 0.1 this week</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card-icon">📅</div>
+            <div class="metric-card-num" id="metricStreak">18</div>
+            <div class="metric-card-label">Day Active Streak</div>
+            <div class="metric-card-change up" id="metricStreakChange">🔥 Personal best!</div>
+          </div>
+        </div>
+
+        <!-- Earnings Chart -->
+        <div class="earnings-panel">
+          <div class="panel-header">
+            <h3>Daily Earnings (Last 14 Days)</h3>
+            <div class="panel-controls">
+              <button class="ctrl-btn active" onclick="switchChart('days')" id="btnDays">14 Days</button>
+              <button class="ctrl-btn" onclick="switchChart('months')" id="btnMonths">6 Months</button>
+            </div>
+          </div>
+          <div class="chart-area">
+            <div class="chart-bars" id="earningsChart"></div>
+          </div>
+        </div>
+
+        <!-- Job History Table -->
+        <div class="job-history-panel">
+          <div class="panel-header">
+            <h3>Recent Work History</h3>
+            <div class="panel-controls">
+              <button class="ctrl-btn active" id="filterAll" onclick="filterJobs('all')">All</button>
+              <button class="ctrl-btn" id="filterRide" onclick="filterJobs('RideConnect')">🚗 Ride</button>
+              <button class="ctrl-btn" id="filterFreelance" onclick="filterJobs('FreelanceHub')">💼 Freelance</button>
+              <button class="ctrl-btn" id="filterBuild" onclick="filterJobs('BuildDay')">🏗️ Build</button>
+            </div>
+          </div>
+          <table class="job-table" id="jobTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Platform</th>
+                <th>Job Description</th>
+                <th>Earnings</th>
+                <th>Rating</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="jobTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+  <script>
+    // Mobile menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open');
+      });
+    }
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 20);
+    });
+  </script>
+</body>
+</html>
