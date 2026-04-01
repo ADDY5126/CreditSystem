@@ -10,51 +10,111 @@ gsap.registerPlugin(ScrollTrigger);
 ───────────────────────────────────────────── */
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (prefersReducedMotion) {
-  // Skip all animations for accessibility
-  console.log('TrustScore: Reduced motion detected, skipping animations.');
+  console.log('TrustScore: Reduced motion off.');
 } else {
-  initAnimations();
+  // Wait for full layout before setting up ScrollTrigger positions
+  window.addEventListener('load', initAnimations);
 }
 
 function initAnimations() {
 
   /* ─────────────────────────────────────────────
-     1. HERO ENTRANCE — timeline on page load
+     1. PAGE INTRO — navbar stagger → hero stagger
   ───────────────────────────────────────────── */
-  const heroTL = gsap.timeline({
+
+  // Hide everything before the timeline runs (no flash)
+  gsap.set('.nav-logo, .nav-link, .btn-nav', { autoAlpha: 0, y: -30 });
+  gsap.set('.hero-title', { autoAlpha: 0, y: -window.innerHeight });
+  gsap.set('.hero-subtitle, .hero-cta .btn-primary, .hero-cta .btn-secondary, .hero-visual .hero-img-frame', { autoAlpha: 0 });
+
+  const masterTL = gsap.timeline({
     defaults: { ease: 'power3.out' },
-    delay: 0.15
+    delay: 0.3
   });
 
-  heroTL
-    .from('.hero-title', {
-      y: 80, opacity: 0, duration: 1.1,
-      clearProps: 'all'
+  // ── Phase 1: Navbar items stagger down from top ──
+  masterTL
+    .to('.nav-logo', {
+      autoAlpha: 1, y: 0, duration: 1.0
     })
-    .from('.hero-subtitle', {
-      y: 50, opacity: 0, duration: 0.85
-    }, '-=0.65')
-    .from('.hero-cta .btn-primary', {
-      y: 30, opacity: 0, duration: 0.6, scale: 0.95
-    }, '-=0.55')
-    .from('.hero-cta .btn-secondary', {
-      y: 30, opacity: 0, duration: 0.6, scale: 0.95
-    }, '-=0.48')
-    .from('.hero-stats .stat-item', {
-      y: 24, opacity: 0, duration: 0.5, stagger: 0.12
-    }, '-=0.45')
-    .from('.hero-stats .stat-divider', {
-      scaleY: 0, opacity: 0, duration: 0.4, stagger: 0.1
-    }, '-=0.5')
-    .from('.hero-visual .hero-img-frame', {
-      x: 80, opacity: 0, duration: 1.1, ease: 'power2.out'
-    }, '-=1.3')
-    .from('.hero-visual .score-card', {
-      y: 40, opacity: 0, duration: 0.8, scale: 0.92, ease: 'back.out(1.4)'
-    }, '-=0.7')
-    .from('.hero-visual .mini-card', {
-      scale: 0.75, opacity: 0, duration: 0.55, stagger: 0.22, ease: 'back.out(1.6)'
-    }, '-=0.5');
+    .to('.nav-link', {
+      autoAlpha: 1, y: 0, duration: 0.8,
+      stagger: { amount: 0.5, from: 'start' }
+    }, '-=0.6')
+    .to('.btn-nav', {
+      autoAlpha: 1, y: 0, duration: 0.8, ease: 'back.out(1.6)'
+    }, '-=0.4')
+
+  // ── Phase 2: Hero title DROPS from top of page ──
+    .to('.hero-title', {
+      autoAlpha: 1,
+      y: 0,
+      duration: 1.6,
+      ease: 'power4.out'
+    }, '-=0.2')
+
+  // ── Phase 3: Subtitle & CTAs cascade in ──
+    .fromTo('.hero-subtitle',
+      { autoAlpha: 0, y: 60 },
+      { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
+    .fromTo('.hero-cta .btn-primary',
+      { autoAlpha: 0, y: 40, scale: 0.88 },
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.9, ease: 'back.out(1.5)' }, '-=0.7')
+    .fromTo('.hero-cta .btn-secondary',
+      { autoAlpha: 0, y: 40, scale: 0.88 },
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.9, ease: 'back.out(1.5)' }, '-=0.7')
+
+  // ── Phase 4: Chart slides in from right ──
+    .fromTo('.hero-visual .hero-img-frame',
+      { autoAlpha: 0, x: 120 },
+      { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power2.out' }, '-=1.4')
+    .call(() => animateHeroChart());
+
+
+  /* ─────────────────────────────────────────────
+     HERO CHART — bar grow + line draw + labels
+  ───────────────────────────────────────────── */
+  function animateHeroChart() {
+    const baseline = 310;
+    const barDefs = [
+      { id: 'cbar1', h: 72 },
+      { id: 'cbar2', h: 116 },
+      { id: 'cbar3', h: 158 },
+      { id: 'cbar4', h: 200 },
+      { id: 'cbar5', h: 236 }
+    ];
+
+    // Bars rise from baseline
+    barDefs.forEach((bar, i) => {
+      const el = document.getElementById(bar.id);
+      if (!el) return;
+      gsap.fromTo(el,
+        { attr: { height: 0, y: baseline } },
+        { attr: { height: bar.h, y: baseline - bar.h }, duration: 1.1, delay: i * 0.13, ease: 'power3.out' }
+      );
+    });
+
+    // Draw trend line
+    const line = document.getElementById('trendLine');
+    if (line && line.getTotalLength) {
+      const len = line.getTotalLength();
+      gsap.set(line, { strokeDasharray: len, strokeDashoffset: len });
+      gsap.to(line, {
+        strokeDashoffset: 0, duration: 1.7, delay: 0.55, ease: 'power2.inOut',
+        onComplete() {
+          // Arrow tip
+          gsap.to('#chartArrow', { opacity: 1, duration: 0.3, ease: 'power2.out' });
+          // Intersection dots
+          gsap.to('.trend-dot', { opacity: 1, scale: 1, duration: 0.4, stagger: 0.1, ease: 'back.out(2)' });
+          // Score labels
+          gsap.fromTo('.bar-label',
+            { opacity: 0, y: 6 },
+            { opacity: 1, y: 0, duration: 0.4, stagger: 0.1, ease: 'power2.out' }
+          );
+        }
+      });
+    }
+  }
 
 
   /* ─────────────────────────────────────────────
@@ -122,51 +182,77 @@ function initAnimations() {
   });
 
 
-  /* ─────────────────────────────────────────────
-     4. FEATURES SECTION
-  ───────────────────────────────────────────── */
-  gsap.from('.features .section-header', {
-    scrollTrigger: {
-      trigger: '.features',
-      start: 'top 80%',
-      toggleActions: 'play none none reverse'
-    },
-    y: 55,
-    opacity: 0,
-    duration: 0.95,
-    ease: 'power2.out'
-  });
+  // Helper: wire up pop-in for a section's tag → title → subtitle
+  function sectionPopIn(sectionSel) {
+    const section = document.querySelector(sectionSel);
+    if (!section) return;
+    const tag      = section.querySelector('.section-tag');
+    const title    = section.querySelector('.section-title');
+    const subtitle = section.querySelector('.section-subtitle');
 
-  // Cards appear with stagger, alternating direction
-  const featureCards = gsap.utils.toArray('.feature-card');
-  gsap.from(featureCards, {
-    scrollTrigger: {
-      trigger: '.features-grid',
-      start: 'top 82%',
-      toggleActions: 'play none none reverse'
-    },
-    y: 70,
-    opacity: 0,
-    duration: 0.75,
-    stagger: {
-      amount: 0.85,
-      from: 'start',
-      ease: 'power1.inOut'
-    },
-    ease: 'power2.out'
-  });
+    if (tag) {
+      gsap.fromTo(tag,
+        { autoAlpha: 0, scale: 0.6, y: 20 },
+        { autoAlpha: 1, scale: 1, y: 0, duration: 0.7, ease: 'back.out(2)',
+          scrollTrigger: { trigger: tag, start: 'top 92%', toggleActions: 'play none none reverse' } }
+      );
+    }
+    if (title) {
+      gsap.fromTo(title,
+        { autoAlpha: 0, y: 60, scale: 0.88 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 1.0, ease: 'back.out(1.5)',
+          scrollTrigger: { trigger: title, start: 'top 90%', toggleActions: 'play none none reverse' } }
+      );
+    }
+    if (subtitle) {
+      gsap.fromTo(subtitle,
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: subtitle, start: 'top 88%', toggleActions: 'play none none reverse' } }
+      );
+    }
+  }
 
-  // Feature icon wraps pop in
-  gsap.from('.feature-icon-wrap', {
-    scrollTrigger: {
-      trigger: '.features-grid',
-      start: 'top 75%'
-    },
-    scale: 0,
-    opacity: 0,
-    duration: 0.5,
-    stagger: 0.1,
-    ease: 'back.out(2)'
+  sectionPopIn('.features');
+
+  // Each card gets its own ScrollTrigger — in on scroll-down, out on scroll-up
+  gsap.utils.toArray('.feature-card').forEach((card) => {
+    // Pure y-axis: avoids clipping by grid/section overflow
+    gsap.fromTo(card,
+      { autoAlpha: 0, y: 80, scale: 0.93 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.95,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 92%',
+          end: 'top 20%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+
+    // Icon pops in when card's top hits 85%
+    const icon = card.querySelector('.feature-icon-wrap');
+    if (icon) {
+      gsap.fromTo(icon,
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.6,
+          ease: 'back.out(2.5)',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
   });
 
   // Score bar fill animation in feature card
@@ -182,20 +268,8 @@ function initAnimations() {
   });
 
 
-  /* ─────────────────────────────────────────────
-     5. HOW IT WORKS SECTION
-  ───────────────────────────────────────────── */
-  gsap.from('.how-it-works .section-header', {
-    scrollTrigger: {
-      trigger: '.how-it-works',
-      start: 'top 80%',
-      toggleActions: 'play none none reverse'
-    },
-    y: 55,
-    opacity: 0,
-    duration: 0.95,
-    ease: 'power2.out'
-  });
+  sectionPopIn('.how-it-works');
+
 
   // Step cards fly in from bottom with slight overshoot
   gsap.from('.step-card', {
@@ -274,20 +348,8 @@ function initAnimations() {
   });
 
 
-  /* ─────────────────────────────────────────────
-     6. PLATFORMS SECTION
-  ───────────────────────────────────────────── */
-  gsap.from('.platforms .section-header', {
-    scrollTrigger: {
-      trigger: '.platforms',
-      start: 'top 80%',
-      toggleActions: 'play none none reverse'
-    },
-    y: 55,
-    opacity: 0,
-    duration: 0.95,
-    ease: 'power2.out'
-  });
+  sectionPopIn('.platforms');
+
 
   // Platform cards rotate in elegantly
   const platformCards = gsap.utils.toArray('.platform-card');
@@ -376,15 +438,7 @@ function initAnimations() {
   });
 
 
-  /* ─────────────────────────────────────────────
-     9. NAVBAR — subtle intro slide down
-  ───────────────────────────────────────────── */
-  gsap.from('.navbar', {
-    y: -100,
-    opacity: 0,
-    duration: 0.9,
-    ease: 'power3.out'
-  });
+  // (Navbar is already handled by the masterTL above)
 
 
   /* ─────────────────────────────────────────────
@@ -411,4 +465,7 @@ function initAnimations() {
   });
 
   console.log('TrustScore GSAP Animations Initialized ✓');
+
+  // Recalculate all trigger positions after full setup
+  ScrollTrigger.refresh();
 }

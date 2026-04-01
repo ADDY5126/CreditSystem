@@ -10,8 +10,8 @@ const WORKERS = [
     name: 'Ramesh Kumar',
     initials: 'RK',
     location: 'Mumbai, MH · Ride Driver & Builder',
-    trustScore: 782,
-    scoreChange: '+18 pts this week',
+    trustScore: 92,
+    scoreChange: '+3 pts this week',
     scoreDirection: 'positive',
     badge: 'Excellent',
     badgeClass: 'excellent',
@@ -61,8 +61,8 @@ const WORKERS = [
     name: 'Priya Sharma',
     initials: 'PS',
     location: 'Delhi, DL · Freelancer',
-    trustScore: 634,
-    scoreChange: '+5 pts this week',
+    trustScore: 74,
+    scoreChange: '+2 pts this week',
     scoreDirection: 'positive',
     badge: 'Good',
     badgeClass: 'good',
@@ -108,10 +108,10 @@ const WORKERS = [
     name: 'Arjun Singh',
     initials: 'AS',
     location: 'Pune, MH · Construction & Rides',
-    trustScore: 451,
-    scoreChange: '-8 pts this week',
+    trustScore: 41,
+    scoreChange: '-3 pts this week',
     scoreDirection: 'negative',
-    badge: 'Average',
+    badge: 'Poor',
     badgeClass: 'average',
     completion: 62,
     completionLabel: '62%',
@@ -174,10 +174,11 @@ function renderDashboard(worker) {
   document.getElementById('workerFullName').textContent = worker.name;
   document.getElementById('workerLocation').textContent = worker.location;
 
-  // Update score badge
-  const badge = document.getElementById('scoreBadge');
-  badge.textContent = worker.badge;
-  badge.className = `score-badge ${worker.badgeClass}`;
+  // Update score badge dynamically based on score
+  const { badge, badgeClass } = getBadge(worker.trustScore);
+  const badgeEl = document.getElementById('scoreBadge');
+  badgeEl.textContent = badge;
+  badgeEl.className = `score-badge ${badgeClass}`;
 
   // Animate trust score ring
   animateScoreRing(worker.trustScore);
@@ -217,11 +218,20 @@ function renderDashboard(worker) {
   renderJobTable('all');
 }
 
+function getBadge(score) {
+  if (score >= 90) return { badge: 'Excellent', badgeClass: 'excellent' };
+  if (score >= 80) return { badge: 'Great',    badgeClass: 'excellent' };
+  if (score >= 60) return { badge: 'Good',     badgeClass: 'good' };
+  if (score >= 50) return { badge: 'Average',  badgeClass: 'average' };
+  if (score >= 30) return { badge: 'Poor',     badgeClass: 'average' };
+  return                   { badge: 'Trash',   badgeClass: 'poor' };
+}
+
 function animateScoreRing(score) {
   const circle = document.getElementById('bigScoreCircle');
   if (!circle) return;
   const circumference = 477.5;
-  const offset = circumference - (score / 1000) * circumference;
+  const offset = circumference - (score / 100) * circumference;
   setTimeout(() => {
     circle.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)';
     circle.style.strokeDashoffset = offset;

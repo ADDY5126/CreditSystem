@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lender Portal — TrustScore</title>
+  <title>Lender Portal â€” TrustScore</title>
   <meta name="description" content="Lender module for TrustScore. Auto-approve or deny micro-loans for gig workers based on real-time Trust Scores." />>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -48,7 +48,7 @@
   <div class="lender-page">
     <div class="lender-container">
       <div class="lender-header">
-        <h1>🏦 Lender Portal</h1>
+        <h1>Lender Portal</h1>
         <p>Automated loan decision engine powered by real-time Trust Scores. Approve or deny micro-loans in seconds.</p>
       </div>
 
@@ -56,7 +56,7 @@
       <div class="loan-engine-grid">
         <!-- Loan Request Form -->
         <div class="loan-form-panel">
-          <h3>📋 Loan Application</h3>
+          <h3>Loan Application</h3>
           <div class="form-group">
             <label class="form-label" for="applicantSelect">Select Applicant</label>
             <select class="form-select" id="applicantSelect">
@@ -70,9 +70,9 @@
             <label class="form-label" for="loanAmount">Loan Amount</label>
             <input type="range" class="amount-slider" id="loanAmountSlider" min="500" max="25000" step="500" value="5000" />
             <div class="amount-labels">
-              <span>₹500</span>
-              <span id="sliderVal" style="color:var(--accent-purple);font-weight:700">₹5,000</span>
-              <span>₹25,000</span>
+              <span>â‚¹500</span>
+              <span id="sliderVal" style="color:var(--accent-purple);font-weight:700">â‚¹5,000</span>
+              <span>â‚¹25,000</span>
             </div>
           </div>
           <div class="form-group">
@@ -95,20 +95,20 @@
             </select>
           </div>
           <button class="submit-loan-btn" id="submitLoanBtn">
-            ⚡ Evaluate & Decide Loan
+            âš¡ Evaluate & Decide Loan
           </button>
         </div>
 
         <!-- Loan Result Panel -->
         <div class="loan-result-panel">
-          <h3>📊 Decision Result</h3>
+          <h3>Decision Result</h3>
           <div class="loan-result-empty" id="loanEmpty">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
             <p>Submit an application to see the automated decision</p>
           </div>
           <div class="loan-decision" id="loanDecision">
             <div class="decision-banner" id="decisionBanner">
-              <div class="decision-icon" id="decisionIcon">✓</div>
+              <div class="decision-icon" id="decisionIcon">âœ“</div>
               <div>
                 <div class="decision-title" id="decisionTitle">Approved</div>
                 <div class="decision-reason" id="decisionReason">Strong Trust Score meets lending threshold</div>
@@ -132,7 +132,7 @@
                 <div class="score-row">
                   <span class="score-row-label">Avg Rating</span>
                   <div class="score-row-bar"><div class="score-row-fill" id="lr-rating" style="width:0%;background:linear-gradient(90deg,#3b82f6,#6366f1)"></div></div>
-                  <span class="score-row-val" id="lv-rating">4.8★</span>
+                  <span class="score-row-val" id="lv-rating">4.8â˜…</span>
                 </div>
                 <div class="score-row">
                   <span class="score-row-label">Income Consistency</span>
@@ -148,7 +148,7 @@
               <div class="loan-terms">
                 <div class="loan-term-item">
                   <div class="loan-term-label">Amount</div>
-                  <div class="loan-term-val" id="termAmount">₹5,000</div>
+                  <div class="loan-term-val" id="termAmount">â‚¹5,000</div>
                 </div>
                 <div class="loan-term-item">
                   <div class="loan-term-label">Interest Rate</div>
@@ -160,7 +160,7 @@
                 </div>
                 <div class="loan-term-item">
                   <div class="loan-term-label">Max Eligible</div>
-                  <div class="loan-term-val" id="termMax">₹15,000</div>
+                  <div class="loan-term-val" id="termMax">â‚¹15,000</div>
                 </div>
                 <div class="loan-term-item">
                   <div class="loan-term-label">Auto-Repay</div>
@@ -174,7 +174,7 @@
             </div>
 
             <button class="submit-loan-btn" id="disburseLoanBtn" style="display:none">
-              💸 Disburse Loan Now
+              Disburse Loan Now
             </button>
           </div>
         </div>
@@ -182,7 +182,7 @@
 
       <!-- Application Queue (high-volume ingestion demo) -->
       <div class="queue-section">
-        <h3>📥 Live Application Queue <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(Async processing — no DB lock)</span></h3>
+        <h3>Live Application Queue <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(Async processing â€” no DB lock)</span></h3>
         <div class="queue-table-wrap">
           <table class="queue-table">
             <thead>
@@ -204,11 +204,11 @@
 
       <!-- Data Ingestion Monitor -->
       <div class="ingestion-section">
-        <h3>⚡ Real-Time Data Ingestion Monitor</h3>
+        <h3>Real-Time Data Ingestion Monitor</h3>
         <div class="ingestion-grid">
           <div class="ingestion-card">
             <div class="ingestion-header">
-              <span class="ingestion-name">🚗 RideConnect API</span>
+              <span class="ingestion-name">RideConnect API</span>
               <span class="ingestion-status">
                 <div class="status-dot active"></div>
                 Live
@@ -219,7 +219,7 @@
           </div>
           <div class="ingestion-card">
             <div class="ingestion-header">
-              <span class="ingestion-name">💼 FreelanceHub API</span>
+              <span class="ingestion-name">FreelanceHub API</span>
               <span class="ingestion-status">
                 <div class="status-dot active"></div>
                 Live
@@ -230,7 +230,7 @@
           </div>
           <div class="ingestion-card">
             <div class="ingestion-header">
-              <span class="ingestion-name">🏗️ BuildDay API</span>
+              <span class="ingestion-name">BuildDay API</span>
               <span class="ingestion-status">
                 <div class="status-dot busy"></div>
                 Processing
@@ -257,3 +257,4 @@
   </script>
 </body>
 </html>
+
