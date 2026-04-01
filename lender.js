@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    TrustTrack — Lender Portal JavaScript
    Loan engine + async queue + data ingestion simulation
    ============================================================ */
@@ -76,7 +76,7 @@ document.getElementById('submitLoanBtn')?.addEventListener('click', function() {
   btn.disabled = true;
 
   setTimeout(() => {
-    btn.textContent = '⚡ Evaluate & Decide Loan';
+    btn.textContent = 'Evaluate & Decide Loan';
     btn.disabled = false;
 
     const result = evaluateLoan(applicant, amount, repayDays);
@@ -103,10 +103,10 @@ document.getElementById('submitLoanBtn')?.addEventListener('click', function() {
     animateLenderBar('lr-income', 'lv-income', applicant.income, applicant.incomeLabel);
 
     // Loan terms
-    document.getElementById('termAmount').textContent = `₹${amount.toLocaleString()}`;
+    document.getElementById('termAmount').textContent = `\u20B9${amount.toLocaleString()}`;
     document.getElementById('termRate').textContent = calcInterestRate(applicant, repayDays);
     document.getElementById('termRepay').textContent = repayDays === 1 ? '1 Day' : `${repayDays} Days`;
-    document.getElementById('termMax').textContent = applicant.maxLoan > 0 ? `₹${applicant.maxLoan.toLocaleString()}` : 'N/A';
+    document.getElementById('termMax').textContent = applicant.maxLoan > 0 ? `\u20B9${applicant.maxLoan.toLocaleString()}` : 'N/A';
     document.getElementById('termAutoRepay').textContent = result.decision === 'approved' ? 'Enabled' : 'N/A';
 
     // Disburse button
@@ -114,7 +114,7 @@ document.getElementById('submitLoanBtn')?.addEventListener('click', function() {
     if (result.decision === 'approved') {
       disburseBtn.style.display = 'block';
       disburseBtn.onclick = () => {
-        disburseBtn.textContent = '✅ Loan Disbursed Successfully!';
+        disburseBtn.textContent = 'Loan Disbursed Successfully!';
         disburseBtn.style.background = 'linear-gradient(135deg,#10b981,#059669)';
         disburseBtn.disabled = true;
         // Add to queue
@@ -141,7 +141,7 @@ function animateLenderBar(barId, valId, pct, label) {
 
 /* ——— Loan Amount Slider ——— */
 document.getElementById('loanAmountSlider')?.addEventListener('input', function() {
-  document.getElementById('sliderVal').textContent = `₹${parseInt(this.value).toLocaleString()}`;
+  document.getElementById('sliderVal').textContent = `\u20B9${parseInt(this.value).toLocaleString()}`;
 });
 
 /* ——— Application Queue ——— */
@@ -188,7 +188,7 @@ function renderQueue() {
         <td style="color:var(--text-muted);font-family:'Courier New',monospace">#${1000 + queueData.length - i}</td>
         <td style="font-weight:600">${item.name}</td>
         <td style="font-weight:700;color:${scoreColor}">${item.score}</td>
-        <td>₹${item.amount.toLocaleString()}</td>
+        <td>\u20B9${item.amount.toLocaleString()}</td>
         <td style="color:var(--text-secondary)">${item.purpose}</td>
         <td><span class="status-pill completed" style="background:rgba(16,185,129,0.1);color:#6ee7b7;border:1px solid rgba(16,185,129,0.2)">Processed</span></td>
         <td>${dStatus}</td>
@@ -200,21 +200,21 @@ function renderQueue() {
 
 /* ——— Ingestion Simulator ——— */
 const RIDE_LOGS = [
-  'RECV trip_id=TRP-9821 driver=RK earnings=₹320',
+  'RECV trip_id=TRP-9821 driver=RK earnings=\u20B9320',
   'SCORE updated for RK: +2pts (trip completion)',
-  'RECV trip_id=TRP-9822 driver=VS earnings=₹180',
+  'RECV trip_id=TRP-9822 driver=VS earnings=\u20B9180',
   'QUEUE [ride-events] size=12 | Processing...',
   'COMMIT worker_id=W011 platform=RideConnect',
   'RECV rating=5 for trip TRP-9821',
   'SCORE updated for RK: +1pt (5-star rating)',
   'ASYNC batch flushed: 8 events processed',
-  'RECV trip_id=TRP-9823 driver=PS earnings=₹240',
+  'RECV trip_id=TRP-9823 driver=PS earnings=\u20B9240',
   'NO_LOCK: async log write (score-audit table)',
 ];
 const FREELANCE_LOGS = [
   'RECV contract_done=FH-4421 worker=PS rating=4',
   'SCORE updated for PS: +3pts (contract complete)',
-  'RECV hourly_log=FH-4422 hours=3.5 rate=₹350',
+  'RECV hourly_log=FH-4422 hours=3.5 rate=\u20B9350',
   'QUEUE [freelance-events] size=6 | Processing...',
   'COMMIT worker_id=W022 platform=FreelanceHub',
   'RECV review="Great work!" for FH-4421',
@@ -279,3 +279,4 @@ setTimeout(() => addLog('logBuild', BUILD_LOGS, 0, 0, ''), 150);
 setTimeout(() => addLog('logBuild', BUILD_LOGS, 1, 0, ''), 400);
 
 console.log('TrustTrack Lender Portal Loaded ✓ — Real-time scoring & async ingestion active');
+

@@ -255,6 +255,31 @@ function initAnimations() {
     }
   });
 
+  /* ─────────────────────────────────────────────
+     4b. DASHBOARD PREVIEW SECTION
+  ───────────────────────────────────────────── */
+  sectionPopIn('.dash-preview-section');
+
+  gsap.fromTo('.dp-score-card',
+    { autoAlpha: 0, x: -60, scale: 0.94 },
+    { autoAlpha: 1, x: 0, scale: 1, duration: 1.0, ease: 'power3.out',
+      scrollTrigger: { trigger: '.dash-preview-layout', start: 'top 88%', toggleActions: 'play none none reverse' } }
+  );
+
+  gsap.utils.toArray('.dp-panel').forEach((panel, i) => {
+    gsap.fromTo(panel,
+      { autoAlpha: 0, x: 60, y: 20 },
+      { autoAlpha: 1, x: 0, y: 0, duration: 0.85, delay: i * 0.15, ease: 'power3.out',
+        scrollTrigger: { trigger: '.dash-preview-layout', start: 'top 85%', toggleActions: 'play none none reverse' } }
+    );
+  });
+
+  gsap.fromTo('.dp-cta-btn',
+    { autoAlpha: 0, y: 20, scale: 0.9 },
+    { autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.6)',
+      scrollTrigger: { trigger: '.dp-cta-btn', start: 'top 90%', toggleActions: 'play none none reverse' } }
+  );
+
   // Score bar fill animation in feature card
   ScrollTrigger.create({
     trigger: '.features-grid',
