@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    TrustTrack — Lender Portal JavaScript
    Loan engine + async queue + data ingestion simulation
    ============================================================ */
@@ -132,10 +132,20 @@ document.getElementById('submitLoanBtn')?.addEventListener('click', function() {
   }, 1400);
 });
 
+function scoreColor(pct) {
+  if (pct >= 80) return 'linear-gradient(90deg, #005F02, #C0B87A)';
+  if (pct >= 50) return 'linear-gradient(90deg, #b45309, #fbbf24)';
+  return              'linear-gradient(90deg, #991b1b, #ef4444)';
+}
+
 function animateLenderBar(barId, valId, pct, label) {
   const bar = document.getElementById(barId);
   const val = document.getElementById(valId);
-  if (bar) { bar.style.width = '0%'; setTimeout(() => { bar.style.transition = 'width 1s ease'; bar.style.width = `${pct}%`; }, 50); }
+  if (bar) {
+    bar.style.background = scoreColor(pct);
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.transition = 'width 1s ease'; bar.style.width = `${pct}%`; }, 50);
+  }
   if (val) val.textContent = label;
 }
 

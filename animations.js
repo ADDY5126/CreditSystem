@@ -24,8 +24,8 @@ function initAnimations() {
 
   // Hide everything before the timeline runs (no flash)
   gsap.set('.nav-logo, .nav-link, .btn-nav', { autoAlpha: 0, y: -30 });
-  gsap.set('.hero-title', { autoAlpha: 0, y: -window.innerHeight });
-  gsap.set('.hero-subtitle, .hero-cta .btn-primary, .hero-cta .btn-secondary, .hero-visual .hero-img-frame', { autoAlpha: 0 });
+  gsap.set('#heroBrandHeading', { autoAlpha: 0, y: -window.innerHeight * 0.6 });
+  gsap.set('#heroTitle, #heroSubtitle, .hero-cta .btn-primary, .hero-cta .btn-secondary, .hero-visual .hero-img-frame', { autoAlpha: 0 });
 
   const masterTL = gsap.timeline({
     defaults: { ease: 'power3.out' },
@@ -34,40 +34,36 @@ function initAnimations() {
 
   // ── Phase 1: Navbar items stagger down from top ──
   masterTL
-    .to('.nav-logo', {
-      autoAlpha: 1, y: 0, duration: 1.0
-    })
+    .to('.nav-logo', { autoAlpha: 1, y: 0, duration: 1.0 })
     .to('.nav-link', {
       autoAlpha: 1, y: 0, duration: 0.8,
       stagger: { amount: 0.5, from: 'start' }
     }, '-=0.6')
-    .to('.btn-nav', {
-      autoAlpha: 1, y: 0, duration: 0.8, ease: 'back.out(1.6)'
-    }, '-=0.4')
+    .to('.btn-nav', { autoAlpha: 1, y: 0, duration: 0.8, ease: 'back.out(1.6)' }, '-=0.4')
 
-  // ── Phase 2: Hero title DROPS from top of page ──
-    .to('.hero-title', {
-      autoAlpha: 1,
-      y: 0,
-      duration: 1.6,
-      ease: 'power4.out'
-    }, '-=0.2')
+  // ── Phase 2: TrustScore brand heading DROPS from top ──
+    .to('#heroBrandHeading', {
+      autoAlpha: 1, y: 0, duration: 1.8, ease: 'power4.out'
+    }, '-=0.3')
 
-  // ── Phase 3: Subtitle & CTAs cascade in ──
-    .fromTo('.hero-subtitle',
-      { autoAlpha: 0, y: 60 },
-      { autoAlpha: 1, y: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
+  // ── Phase 3: Subtitle & hero tagline cascade ──
+    .fromTo('#heroTitle',
+      { autoAlpha: 0, y: 50 },
+      { autoAlpha: 1, y: 0, duration: 1.1, ease: 'power3.out' }, '-=1.0')
+    .fromTo('#heroSubtitle',
+      { autoAlpha: 0, y: 40 },
+      { autoAlpha: 1, y: 0, duration: 1.0, ease: 'power3.out' }, '-=0.8')
     .fromTo('.hero-cta .btn-primary',
-      { autoAlpha: 0, y: 40, scale: 0.88 },
+      { autoAlpha: 0, y: 30, scale: 0.88 },
       { autoAlpha: 1, y: 0, scale: 1, duration: 0.9, ease: 'back.out(1.5)' }, '-=0.7')
     .fromTo('.hero-cta .btn-secondary',
-      { autoAlpha: 0, y: 40, scale: 0.88 },
+      { autoAlpha: 0, y: 30, scale: 0.88 },
       { autoAlpha: 1, y: 0, scale: 1, duration: 0.9, ease: 'back.out(1.5)' }, '-=0.7')
 
-  // ── Phase 4: Chart slides in from right ──
+  // ── Phase 4: Chart fades up from below ──
     .fromTo('.hero-visual .hero-img-frame',
-      { autoAlpha: 0, x: 120 },
-      { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power2.out' }, '-=1.4')
+      { autoAlpha: 0, y: 80 },
+      { autoAlpha: 1, y: 0, duration: 1.4, ease: 'power2.out' }, '-=1.0')
     .call(() => animateHeroChart());
 
 
@@ -255,30 +251,6 @@ function initAnimations() {
     }
   });
 
-  /* ─────────────────────────────────────────────
-     4b. DASHBOARD PREVIEW SECTION
-  ───────────────────────────────────────────── */
-  sectionPopIn('.dash-preview-section');
-
-  gsap.fromTo('.dp-score-card',
-    { autoAlpha: 0, x: -60, scale: 0.94 },
-    { autoAlpha: 1, x: 0, scale: 1, duration: 1.0, ease: 'power3.out',
-      scrollTrigger: { trigger: '.dash-preview-layout', start: 'top 88%', toggleActions: 'play none none reverse' } }
-  );
-
-  gsap.utils.toArray('.dp-panel').forEach((panel, i) => {
-    gsap.fromTo(panel,
-      { autoAlpha: 0, x: 60, y: 20 },
-      { autoAlpha: 1, x: 0, y: 0, duration: 0.85, delay: i * 0.15, ease: 'power3.out',
-        scrollTrigger: { trigger: '.dash-preview-layout', start: 'top 85%', toggleActions: 'play none none reverse' } }
-    );
-  });
-
-  gsap.fromTo('.dp-cta-btn',
-    { autoAlpha: 0, y: 20, scale: 0.9 },
-    { autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.6)',
-      scrollTrigger: { trigger: '.dp-cta-btn', start: 'top 90%', toggleActions: 'play none none reverse' } }
-  );
 
   // Score bar fill animation in feature card
   ScrollTrigger.create({
